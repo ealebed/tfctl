@@ -13,12 +13,12 @@ require (
 	github.com/hashicorp/jsonapi v1.2.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
-	golang.org/x/sync v0.5.0 // indirect
+	golang.org/x/sync v0.6.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
 )
 
 require (
-	github.com/hashicorp/go-tfe v1.42.0
+	github.com/hashicorp/go-tfe v1.43.0
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/spf13/cobra v1.8.0
