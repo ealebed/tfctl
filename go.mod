@@ -2,7 +2,7 @@ module github.com/ealebed/tfctl
 
 go 1.18
 
-require github.com/fatih/color v1.16.0
+require github.com/fatih/color v1.17.0
 
 require (
 	github.com/google/go-querystring v1.1.0 // indirect
