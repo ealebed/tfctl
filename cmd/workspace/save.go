@@ -19,6 +19,7 @@ import (
 	"context"
 
 	"github.com/ealebed/tfctl/pkg/output"
+
 	"github.com/hashicorp/go-tfe"
 	"github.com/spf13/cobra"
 )
@@ -47,12 +48,14 @@ func NewWorkspaceSaveCmd(workspaceOptions *workspaceOptions) *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&options.workspaceName, "workspace", "w", "", "name terraform workspace to create")
-	cmd.MarkFlagRequired("workspace")
+	if err := cmd.MarkFlagRequired("workspace"); err != nil {
+		return nil
+	}
 
 	return cmd
 }
 
-func createWorkspace(cmd *cobra.Command, options *saveOptions) error {
+func createWorkspace(_ *cobra.Command, options *saveOptions) error {
 	c := options.TClient
 	ctx := context.Background()
 

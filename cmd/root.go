@@ -19,7 +19,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 
 	"github.com/ealebed/tfctl/cmd/version"
@@ -78,16 +77,27 @@ func NewCmdRoot(outWriter, errWriter io.Writer) (*cobra.Command, *RootOptions) {
 
 			credentialsPath := home + "/.terraform.d/credentials.tfrc.json"
 
+			// #nosec G304 -- credentials file path is constructed from user home directory
 			jsonFile, err := os.Open(credentialsPath)
 			if err != nil {
 				return err
 			}
-			defer jsonFile.Close()
+			defer func() {
+				if closeErr := jsonFile.Close(); closeErr != nil {
+					// Log error but don't fail if file is already closed
+					_ = closeErr
+				}
+			}()
 
 			var token map[string]interface{}
 
-			byteValue, _ := ioutil.ReadAll(jsonFile)
-			json.Unmarshal(byteValue, &token)
+			byteValue, err := io.ReadAll(jsonFile)
+			if err != nil {
+				return err
+			}
+			if err := json.Unmarshal(byteValue, &token); err != nil {
+				return err
+			}
 
 			cred := token["credentials"].(map[string]interface{})
 			tftoken := cred[options.terraformHostname].(map[string]interface{})

@@ -19,6 +19,7 @@ import (
 	"context"
 
 	"github.com/ealebed/tfctl/pkg/output"
+
 	"github.com/spf13/cobra"
 )
 
@@ -46,12 +47,14 @@ func NewWorkspaceGetCmd(workspaceOptions *workspaceOptions) *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&options.workspaceName, "workspace", "w", "", "terraform workspace name for getting info")
-	cmd.MarkFlagRequired("workspace")
+	if err := cmd.MarkFlagRequired("workspace"); err != nil {
+		return nil
+	}
 
 	return cmd
 }
 
-func getWorkspace(cmd *cobra.Command, options *getOptions) error {
+func getWorkspace(_ *cobra.Command, options *getOptions) error {
 	c := options.TClient
 	ctx := context.Background()
 

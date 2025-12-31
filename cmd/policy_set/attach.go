@@ -20,6 +20,7 @@ import (
 	"fmt"
 
 	"github.com/ealebed/tfctl/utils"
+
 	"github.com/hashicorp/go-tfe"
 	"github.com/spf13/cobra"
 )
@@ -49,13 +50,17 @@ func NewPolicySetAttachCmd(policySetOptions *policySetOptions) *cobra.Command {
 
 	cmd.Flags().StringVarP(&options.policySetName, "policySet", "p", "", "terraform policy set name")
 	cmd.Flags().StringVarP(&options.workspaceName, "workspace", "w", "", "terraform policy workspace name for attaching to a policy set")
-	cmd.MarkFlagRequired("policySet")
-	cmd.MarkFlagRequired("workspace")
+	if err := cmd.MarkFlagRequired("policySet"); err != nil {
+		return nil
+	}
+	if err := cmd.MarkFlagRequired("workspace"); err != nil {
+		return nil
+	}
 
 	return cmd
 }
 
-func attachToPolicySet(cmd *cobra.Command, options *attachOptions) error {
+func attachToPolicySet(_ *cobra.Command, options *attachOptions) error {
 	c := options.TClient
 	ctx := context.Background()
 
@@ -81,9 +86,8 @@ func attachToPolicySet(cmd *cobra.Command, options *attachOptions) error {
 	// Add workspaces to a policy set
 	if err := c.PolicySets.AddWorkspaces(ctx, policySetID, policySetAddWorkspacesOptions); err != nil {
 		return err
-	} else {
-		fmt.Println("Workspace(s) '" + options.workspaceName + "' attached to policy set '" + options.policySetName + "' successfully!")
 	}
+	fmt.Println("Workspace(s) '" + options.workspaceName + "' attached to policy set '" + options.policySetName + "' successfully!")
 
 	return nil
 }

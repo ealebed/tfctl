@@ -89,24 +89,40 @@ func JsonOutput(input interface{}) {
 }
 
 func JsonPrettyOutput(input interface{}, inputType string) {
-	tmp, _ := json.MarshalIndent(input, "", " ")
+	tmp, err := json.MarshalIndent(input, "", " ")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "\n%v\n", err)
+		os.Exit(1)
+	}
 
 	switch inputType {
 	case "workspace":
 		var out *outputWorkspace
-		json.Unmarshal(tmp, &out)
+		if err := json.Unmarshal(tmp, &out); err != nil {
+			fmt.Fprintf(os.Stderr, "\n%v\n", err)
+			os.Exit(1)
+		}
 		JsonOutput(out)
 	case "variable":
 		var out *outputVariable
-		json.Unmarshal(tmp, &out)
+		if err := json.Unmarshal(tmp, &out); err != nil {
+			fmt.Fprintf(os.Stderr, "\n%v\n", err)
+			os.Exit(1)
+		}
 		JsonOutput(out)
 	case "policySet":
 		var out *outputPolicySet
-		json.Unmarshal(tmp, &out)
+		if err := json.Unmarshal(tmp, &out); err != nil {
+			fmt.Fprintf(os.Stderr, "\n%v\n", err)
+			os.Exit(1)
+		}
 		JsonOutput(out)
 	case "OAuthClient":
 		var out *outputOAuthClient
-		json.Unmarshal(tmp, &out)
+		if err := json.Unmarshal(tmp, &out); err != nil {
+			fmt.Fprintf(os.Stderr, "\n%v\n", err)
+			os.Exit(1)
+		}
 		JsonOutput(out)
 	default:
 		fmt.Println("ERROR: No such type '" + inputType + "' for output...")

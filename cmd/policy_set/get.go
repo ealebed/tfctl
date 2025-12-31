@@ -20,6 +20,7 @@ import (
 
 	"github.com/ealebed/tfctl/pkg/output"
 	"github.com/ealebed/tfctl/utils"
+
 	"github.com/hashicorp/go-tfe"
 	"github.com/spf13/cobra"
 )
@@ -48,12 +49,14 @@ func NewPolicySetGetCmd(policySetOptions *policySetOptions) *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&options.policySetName, "policySet", "p", "", "terraform policy set name for getting info")
-	cmd.MarkFlagRequired("policySet")
+	if err := cmd.MarkFlagRequired("policySet"); err != nil {
+		return nil
+	}
 
 	return cmd
 }
 
-func getPolicySet(cmd *cobra.Command, options *getOptions) error {
+func getPolicySet(_ *cobra.Command, options *getOptions) error {
 	c := options.TClient
 	ctx := context.Background()
 

@@ -46,21 +46,22 @@ func NewWorkspaceDeleteCmd(workspaceOptions *workspaceOptions) *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&options.workspaceName, "workspace", "w", "", "name terraform workspace to delete")
-	cmd.MarkFlagRequired("workspace")
+	if err := cmd.MarkFlagRequired("workspace"); err != nil {
+		return nil
+	}
 
 	return cmd
 }
 
-func deleteWorkspace(cmd *cobra.Command, options *deleteOptions) error {
+func deleteWorkspace(_ *cobra.Command, options *deleteOptions) error {
 	c := options.TClient
 	ctx := context.Background()
 
 	// Delete a workspace by its name
 	if err := c.Workspaces.Delete(ctx, options.TerraformOrganization, options.workspaceName); err != nil {
 		return err
-	} else {
-		fmt.Println("Workspace '" + options.workspaceName + "' deleted successfully!")
 	}
+	fmt.Println("Workspace '" + options.workspaceName + "' deleted successfully!")
 
 	return nil
 }

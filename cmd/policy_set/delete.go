@@ -20,6 +20,7 @@ import (
 	"fmt"
 
 	"github.com/ealebed/tfctl/utils"
+
 	"github.com/hashicorp/go-tfe"
 	"github.com/spf13/cobra"
 )
@@ -48,12 +49,14 @@ func NewPolicySetDeleteCmd(policySetOptions *policySetOptions) *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&options.policySetName, "policySet", "p", "", "terraform policy set ID for deleting")
-	cmd.MarkFlagRequired("policySet")
+	if err := cmd.MarkFlagRequired("policySet"); err != nil {
+		return nil
+	}
 
 	return cmd
 }
 
-func deletePolicySet(cmd *cobra.Command, options *deleteOptions) error {
+func deletePolicySet(_ *cobra.Command, options *deleteOptions) error {
 	c := options.TClient
 	ctx := context.Background()
 
@@ -67,9 +70,8 @@ func deletePolicySet(cmd *cobra.Command, options *deleteOptions) error {
 	// Delete a policy set by its ID
 	if err := c.PolicySets.Delete(ctx, policySetID); err != nil {
 		return err
-	} else {
-		fmt.Println("Policy set '" + options.policySetName + "' deleted successfully!")
 	}
+	fmt.Println("Policy set '" + options.policySetName + "' deleted successfully!")
 
 	return nil
 }

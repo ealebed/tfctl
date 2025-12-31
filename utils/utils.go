@@ -46,10 +46,10 @@ func GetPolicySetID(policySets *tfe.PolicySetList, policySetName string) string 
 }
 
 // GetOAuthClientID returns OAuth client ID by given service provider type
-func GetOAuthClientID(OAuthClient *tfe.OAuthClientList, serviceProviderName string) string {
+func GetOAuthClientID(oauthClient *tfe.OAuthClientList, serviceProviderName string) string {
 	regexPattern := fmt.Sprintf(`(?i)%s`, serviceProviderName)
 
-	for _, o := range OAuthClient.Items {
+	for _, o := range oauthClient.Items {
 		matched, _ := regexp.MatchString(regexPattern, o.ServiceProviderName)
 		if matched {
 			return o.ID
