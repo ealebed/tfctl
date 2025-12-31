@@ -13,7 +13,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-//nolint:dupl // This file is intentionally similar to attach.go
 package policy_set
 
 import (

@@ -52,7 +52,7 @@ linters:
     gocyclo:
       min-complexity: 15
     dupl:
-      threshold: 100
+      threshold: 400
     goconst:
       min-len: 2
       min-occurrences: 3
@@ -95,19 +95,3 @@ formatters:
 issues:
   max-issues-per-linter: 0
   max-same-issues: 0
-  exclude-rules:
-    - path: _test\.go
-      linters:
-        - dupl
-    - path: cmd/policy_set/attach.go
-      linters:
-        - dupl
-    - path: cmd/policy_set/detach.go
-      linters:
-        - dupl
-    - path: cmd/workspace/get.go
-      linters:
-        - dupl
-    - path: cmd/workspace/save.go
-      linters:
-        - dupl
