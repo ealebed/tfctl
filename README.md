@@ -178,6 +178,6 @@ tfctl ws list
 tfctl ws delete -w gitlab-tfc-demo
 ```
 
-TODO: 
+TODO:
 - Add global '--dry-run' flag for destructive operations
 - Add colored output

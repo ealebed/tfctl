@@ -17,6 +17,7 @@ package workspace
 
 import (
 	"github.com/ealebed/tfctl/cmd"
+
 	"github.com/spf13/cobra"
 )
 
@@ -35,7 +36,7 @@ func NewWorkspaceCmd(rootOptions *cmd.RootOptions) *cobra.Command {
 		RootOptions: rootOptions,
 	}
 
-	cmd := &cobra.Command{
+	cobraCmd := &cobra.Command{
 		Use:     "ws",
 		Aliases: []string{"workspace"},
 		Short:   "Work with terraform workspaces",
@@ -44,10 +45,10 @@ func NewWorkspaceCmd(rootOptions *cmd.RootOptions) *cobra.Command {
 	}
 
 	// create subcommands
-	cmd.AddCommand(NewWorkspaceGetCmd(options))
-	cmd.AddCommand(NewWorkspaceListCmd(options))
-	cmd.AddCommand(NewWorkspaceSaveCmd(options))
-	cmd.AddCommand(NewWorkspaceDeleteCmd(options))
+	cobraCmd.AddCommand(NewWorkspaceGetCmd(options))
+	cobraCmd.AddCommand(NewWorkspaceListCmd(options))
+	cobraCmd.AddCommand(NewWorkspaceSaveCmd(options))
+	cobraCmd.AddCommand(NewWorkspaceDeleteCmd(options))
 
-	return cmd
+	return cobraCmd
 }

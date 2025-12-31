@@ -22,6 +22,7 @@ import (
 
 	"github.com/ealebed/tfctl/pkg/output"
 	"github.com/ealebed/tfctl/utils"
+
 	"github.com/hashicorp/go-tfe"
 	"github.com/spf13/cobra"
 )
@@ -53,19 +54,25 @@ func NewOAuthClientSaveCmd(oAuthClientOptions *oAuthClientOptions) *cobra.Comman
 		},
 	}
 
-	cmd.Flags().StringVar(&options.providerType, "providerType", "gitlab", "terraform OAuth client type for creating. At this time provided support only for 'gitlab' and 'github' providers. Feel free to contribute ))")
-	cmd.Flags().StringVarP(&options.providerToken, "token", "t", "", "The token string you were given by your VCS provider, e.g. 'ghp_xxxxxxxxxxxxxxx' for a GitHub")
-	cmd.MarkFlagRequired("providerType")
-	cmd.MarkFlagRequired("token")
+	cmd.Flags().StringVar(&options.providerType, "providerType", "gitlab",
+		"terraform OAuth client type for creating. At this time provided support only for 'gitlab' and 'github' providers. Feel free to contribute ))")
+	cmd.Flags().StringVarP(&options.providerToken, "token", "t", "",
+		"The token string you were given by your VCS provider, e.g. 'ghp_xxxxxxxxxxxxxxx' for a GitHub")
+	if err := cmd.MarkFlagRequired("providerType"); err != nil {
+		return nil
+	}
+	if err := cmd.MarkFlagRequired("token"); err != nil {
+		return nil
+	}
 
 	return cmd
 }
 
-func saveOAuthClient(cmd *cobra.Command, options *saveOptions) error {
+func saveOAuthClient(_ *cobra.Command, options *saveOptions) error {
 	c := options.TClient
 	ctx := context.Background()
-	createOptions := tfe.OAuthClientCreateOptions{}
 
+	var createOptions tfe.OAuthClientCreateOptions
 	switch options.providerType {
 	case "github":
 		createOptions = tfe.OAuthClientCreateOptions{
@@ -82,7 +89,9 @@ func saveOAuthClient(cmd *cobra.Command, options *saveOptions) error {
 			ServiceProvider: tfe.ServiceProvider("gitlab_hosted"),
 		}
 	default:
-		fmt.Println("Provider type '" + options.providerType + "' not supported here. All service provider types see here: https://pkg.go.dev/github.com/hashicorp/go-tfe@v1.1.0#ServiceProviderType")
+		fmt.Println("Provider type '" + options.providerType +
+			"' not supported here. All service provider types see here: " +
+			"https://pkg.go.dev/github.com/hashicorp/go-tfe@v1.1.0#ServiceProviderType")
 		fmt.Println("At this time provided support only for 'gitlab' and 'github' providers.")
 		os.Exit(1)
 	}
@@ -102,7 +111,8 @@ func saveOAuthClient(cmd *cobra.Command, options *saveOptions) error {
 		}
 		output.JsonPrettyOutput(OAuthClient, "OAuthClient")
 	} else {
-		fmt.Println("OAuth client for given service provider already exists, check with:\n\t 'tfctl OAuthClient list'\nWe expect only one client per service provider...")
+		fmt.Println("OAuth client for given service provider already exists, check with:\n\t 'tfctl OAuthClient list'\n" +
+			"We expect only one client per service provider...")
 	}
 
 	return nil

@@ -20,6 +20,7 @@ import (
 
 	"github.com/ealebed/tfctl/pkg/output"
 	"github.com/ealebed/tfctl/utils"
+
 	"github.com/hashicorp/go-tfe"
 	"github.com/spf13/cobra"
 )
@@ -59,14 +60,20 @@ func NewVariableSaveCmd(variableOptions *variableOptions) *cobra.Command {
 	cmd.Flags().BoolVar(&options.hcl, "hcl", false, "Optional: Whether to evaluate the value of the variable as a string of HCL code")
 	cmd.Flags().BoolVar(&options.sensitive, "sensitive", false, "Optional: Whether the value is sensitive")
 
-	cmd.MarkFlagRequired("workspace")
-	cmd.MarkFlagRequired("key")
-	cmd.MarkFlagRequired("value")
+	if err := cmd.MarkFlagRequired("workspace"); err != nil {
+		return nil
+	}
+	if err := cmd.MarkFlagRequired("key"); err != nil {
+		return nil
+	}
+	if err := cmd.MarkFlagRequired("value"); err != nil {
+		return nil
+	}
 
 	return cmd
 }
 
-func saveVariable(cmd *cobra.Command, options *saveOptions) error {
+func saveVariable(_ *cobra.Command, options *saveOptions) error {
 	c := options.TClient
 	ctx := context.Background()
 

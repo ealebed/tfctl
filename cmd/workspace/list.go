@@ -19,6 +19,7 @@ import (
 	"context"
 
 	"github.com/ealebed/tfctl/pkg/output"
+
 	"github.com/hashicorp/go-tfe"
 	"github.com/spf13/cobra"
 )
@@ -48,7 +49,7 @@ func NewWorkspaceListCmd(workspaceOptions *workspaceOptions) *cobra.Command {
 	return cmd
 }
 
-func listWorkspaces(cmd *cobra.Command, options *listOptions) error {
+func listWorkspaces(_ *cobra.Command, options *listOptions) error {
 	c := options.TClient
 	ctx := context.Background()
 

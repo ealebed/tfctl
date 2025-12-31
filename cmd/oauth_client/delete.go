@@ -20,6 +20,7 @@ import (
 	"fmt"
 
 	"github.com/ealebed/tfctl/utils"
+
 	"github.com/hashicorp/go-tfe"
 	"github.com/spf13/cobra"
 )
@@ -48,12 +49,14 @@ func NewOAuthClientDeleteCmd(oAuthClientOptions *oAuthClientOptions) *cobra.Comm
 	}
 
 	cmd.Flags().StringVar(&options.providerType, "providerType", "gitlab", "terraform OAuth service provider name for deleting")
-	cmd.MarkFlagRequired("providerType")
+	if err := cmd.MarkFlagRequired("providerType"); err != nil {
+		return nil
+	}
 
 	return cmd
 }
 
-func deleteOAuthClient(cmd *cobra.Command, options *deleteOptions) error {
+func deleteOAuthClient(_ *cobra.Command, options *deleteOptions) error {
 	c := options.TClient
 	ctx := context.Background()
 
@@ -67,9 +70,8 @@ func deleteOAuthClient(cmd *cobra.Command, options *deleteOptions) error {
 	// Delete an OAuth client by its ID
 	if err := c.OAuthClients.Delete(ctx, OAuthClientID); err != nil {
 		return err
-	} else {
-		fmt.Println("OAuth Client '" + options.providerType + "' deleted successfully!")
 	}
+	fmt.Println("OAuth Client '" + options.providerType + "' deleted successfully!")
 
 	return nil
 }

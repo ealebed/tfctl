@@ -17,6 +17,7 @@ package policy_set
 
 import (
 	"github.com/ealebed/tfctl/cmd"
+
 	"github.com/spf13/cobra"
 )
 
@@ -35,7 +36,7 @@ func NewPolicySetCmd(rootOptions *cmd.RootOptions) *cobra.Command {
 		RootOptions: rootOptions,
 	}
 
-	cmd := &cobra.Command{
+	cobraCmd := &cobra.Command{
 		Use:     "policySet",
 		Aliases: []string{"ps"},
 		Short:   "Work with terraform policy sets",
@@ -44,12 +45,12 @@ func NewPolicySetCmd(rootOptions *cmd.RootOptions) *cobra.Command {
 	}
 
 	// create subcommands
-	cmd.AddCommand(NewPolicySetListCmd(options))
-	cmd.AddCommand(NewPolicySetGetCmd(options))
-	cmd.AddCommand(NewPolicySetSaveCmd(options))
-	cmd.AddCommand(NewPolicySetDeleteCmd(options))
-	cmd.AddCommand(NewPolicySetAttachCmd(options))
-	cmd.AddCommand(NewPolicySetDetachCmd(options))
+	cobraCmd.AddCommand(NewPolicySetListCmd(options))
+	cobraCmd.AddCommand(NewPolicySetGetCmd(options))
+	cobraCmd.AddCommand(NewPolicySetSaveCmd(options))
+	cobraCmd.AddCommand(NewPolicySetDeleteCmd(options))
+	cobraCmd.AddCommand(NewPolicySetAttachCmd(options))
+	cobraCmd.AddCommand(NewPolicySetDetachCmd(options))
 
-	return cmd
+	return cobraCmd
 }

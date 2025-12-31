@@ -19,6 +19,7 @@ import (
 	"context"
 
 	"github.com/ealebed/tfctl/pkg/output"
+
 	"github.com/hashicorp/go-tfe"
 	"github.com/spf13/cobra"
 )
@@ -47,12 +48,14 @@ func NewVariableListCmd(variableOptions *variableOptions) *cobra.Command {
 	}
 
 	cmd.Flags().StringVarP(&options.workspaceName, "workspace", "w", "", "terraform workspace name for getting variables list")
-	cmd.MarkFlagRequired("workspace")
+	if err := cmd.MarkFlagRequired("workspace"); err != nil {
+		return nil
+	}
 
 	return cmd
 }
 
-func listVariables(cmd *cobra.Command, options *listOptions) error {
+func listVariables(_ *cobra.Command, options *listOptions) error {
 	c := options.TClient
 	ctx := context.Background()
 

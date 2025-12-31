@@ -17,6 +17,7 @@ package oauth_client
 
 import (
 	"github.com/ealebed/tfctl/cmd"
+
 	"github.com/spf13/cobra"
 )
 
@@ -36,7 +37,7 @@ func NewOAuthClientCmd(rootOptions *cmd.RootOptions) *cobra.Command {
 		RootOptions: rootOptions,
 	}
 
-	cmd := &cobra.Command{
+	cobraCmd := &cobra.Command{
 		Use:     "OAuthClient",
 		Short:   "Work with terraform OAuth clients",
 		Long:    "Work with terraform OAuth clients",
@@ -44,10 +45,10 @@ func NewOAuthClientCmd(rootOptions *cmd.RootOptions) *cobra.Command {
 	}
 
 	// create subcommands
-	cmd.AddCommand(NewOAuthClientListCmd(options))
-	cmd.AddCommand(NewOAuthClientGetCmd(options))
-	cmd.AddCommand(NewOAuthClientSaveCmd(options))
-	cmd.AddCommand(NewOAuthClientDeleteCmd(options))
+	cobraCmd.AddCommand(NewOAuthClientListCmd(options))
+	cobraCmd.AddCommand(NewOAuthClientGetCmd(options))
+	cobraCmd.AddCommand(NewOAuthClientSaveCmd(options))
+	cobraCmd.AddCommand(NewOAuthClientDeleteCmd(options))
 
-	return cmd
+	return cobraCmd
 }

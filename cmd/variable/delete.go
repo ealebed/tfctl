@@ -20,6 +20,7 @@ import (
 	"fmt"
 
 	"github.com/ealebed/tfctl/utils"
+
 	"github.com/hashicorp/go-tfe"
 	"github.com/spf13/cobra"
 )
@@ -50,13 +51,17 @@ func NewVariableDeleteCmd(variableOptions *variableOptions) *cobra.Command {
 
 	cmd.Flags().StringVarP(&options.workspaceName, "workspace", "w", "", "terraform workspace name for deleting variable")
 	cmd.Flags().StringVarP(&options.variableName, "variable", "v", "", "terraform variable name to delete")
-	cmd.MarkFlagRequired("workspace")
-	cmd.MarkFlagRequired("variable")
+	if err := cmd.MarkFlagRequired("workspace"); err != nil {
+		return nil
+	}
+	if err := cmd.MarkFlagRequired("variable"); err != nil {
+		return nil
+	}
 
 	return cmd
 }
 
-func deleteVariable(cmd *cobra.Command, options *deleteOptions) error {
+func deleteVariable(_ *cobra.Command, options *deleteOptions) error {
 	c := options.TClient
 	ctx := context.Background()
 
@@ -76,9 +81,8 @@ func deleteVariable(cmd *cobra.Command, options *deleteOptions) error {
 	// Delete a variable by its ID
 	if err := c.Variables.Delete(ctx, workspace.ID, variableID); err != nil {
 		return err
-	} else {
-		fmt.Println("Variable '" + options.variableName + "' from workspace '" + options.workspaceName + "' deleted successfully!")
 	}
+	fmt.Println("Variable '" + options.variableName + "' from workspace '" + options.workspaceName + "' deleted successfully!")
 
 	return nil
 }

@@ -21,6 +21,7 @@ import (
 	"github.com/ealebed/tfctl/cmd/policy_set"
 	"github.com/ealebed/tfctl/cmd/variable"
 	"github.com/ealebed/tfctl/cmd/workspace"
+
 	"github.com/spf13/cobra"
 )
 

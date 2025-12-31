@@ -17,6 +17,7 @@ package variable
 
 import (
 	"github.com/ealebed/tfctl/cmd"
+
 	"github.com/spf13/cobra"
 )
 
@@ -35,7 +36,7 @@ func NewVariableCmd(rootOptions *cmd.RootOptions) *cobra.Command {
 		RootOptions: rootOptions,
 	}
 
-	cmd := &cobra.Command{
+	cobraCmd := &cobra.Command{
 		Use:     "variable",
 		Aliases: []string{"var"},
 		Short:   "Work with terraform variables",
@@ -44,10 +45,10 @@ func NewVariableCmd(rootOptions *cmd.RootOptions) *cobra.Command {
 	}
 
 	// create subcommands
-	cmd.AddCommand(NewVariableListCmd(options))
-	cmd.AddCommand(NewVariableGetCmd(options))
-	cmd.AddCommand(NewVariableSaveCmd(options))
-	cmd.AddCommand(NewVariableDeleteCmd(options))
+	cobraCmd.AddCommand(NewVariableListCmd(options))
+	cobraCmd.AddCommand(NewVariableGetCmd(options))
+	cobraCmd.AddCommand(NewVariableSaveCmd(options))
+	cobraCmd.AddCommand(NewVariableDeleteCmd(options))
 
-	return cmd
+	return cobraCmd
 }

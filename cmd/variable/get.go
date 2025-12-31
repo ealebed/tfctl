@@ -20,6 +20,7 @@ import (
 
 	"github.com/ealebed/tfctl/pkg/output"
 	"github.com/ealebed/tfctl/utils"
+
 	"github.com/hashicorp/go-tfe"
 	"github.com/spf13/cobra"
 )
@@ -50,13 +51,17 @@ func NewVariableGetCmd(variableOptions *variableOptions) *cobra.Command {
 
 	cmd.Flags().StringVarP(&options.workspaceName, "workspace", "w", "", "terraform workspace name for getting variable")
 	cmd.Flags().StringVarP(&options.variableName, "variable", "v", "", "terraform variable name for getting info")
-	cmd.MarkFlagRequired("workspace")
-	cmd.MarkFlagRequired("variable")
+	if err := cmd.MarkFlagRequired("workspace"); err != nil {
+		return nil
+	}
+	if err := cmd.MarkFlagRequired("variable"); err != nil {
+		return nil
+	}
 
 	return cmd
 }
 
-func getVariable(cmd *cobra.Command, options *getOptions) error {
+func getVariable(_ *cobra.Command, options *getOptions) error {
 	c := options.TClient
 	ctx := context.Background()
 

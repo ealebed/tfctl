@@ -20,6 +20,7 @@ import (
 
 	"github.com/ealebed/tfctl/pkg/output"
 	"github.com/ealebed/tfctl/utils"
+
 	"github.com/hashicorp/go-tfe"
 	"github.com/spf13/cobra"
 )
@@ -54,20 +55,31 @@ func NewPolicySetSaveCmd(policySetOptions *policySetOptions) *cobra.Command {
 
 	cmd.Flags().StringVarP(&options.policySetName, "policySet", "p", "", "terraform policy set name for creation")
 	cmd.Flags().BoolVar(&options.global, "global", false, "Optional: Whether or not the policy set is global")
-	cmd.Flags().StringVar(&options.policiesPath, "policiesPath", "/", "Optional: The sub-path within the attached VCS repository to ingress. All files and directories outside of this sub-path will be ignored. This option may only be specified when a VCS repo is present.")
+	cmd.Flags().StringVar(&options.policiesPath, "policiesPath", "/",
+		"Optional: The sub-path within the attached VCS repository to ingress. "+
+			"All files and directories outside of this sub-path will be ignored. "+
+			"This option may only be specified when a VCS repo is present.")
 
-	cmd.Flags().StringVar(&options.repoName, "repoName", "", "full VCS repository identifier (with user or organization path), e.g. 'ealebed/gcp-sentinel-policies'")
+	cmd.Flags().StringVar(&options.repoName, "repoName", "",
+		"full VCS repository identifier (with user or organization path), e.g. 'ealebed/gcp-sentinel-policies'")
 	cmd.Flags().StringVar(&options.repoBranch, "repoBranch", "master", "VCS repository branch name to read policies from")
-	cmd.Flags().StringVar(&options.tokenID, "tokenID", "", "terraform OAuth token ID. Can be obtained from output 'tfctl OAuthClient get [--providerType=...]'")
+	cmd.Flags().StringVar(&options.tokenID, "tokenID", "",
+		"terraform OAuth token ID. Can be obtained from output 'tfctl OAuthClient get [--providerType=...]'")
 
-	cmd.MarkFlagRequired("policySet")
-	cmd.MarkFlagRequired("repoName")
-	cmd.MarkFlagRequired("tokenID")
+	if err := cmd.MarkFlagRequired("policySet"); err != nil {
+		return nil
+	}
+	if err := cmd.MarkFlagRequired("repoName"); err != nil {
+		return nil
+	}
+	if err := cmd.MarkFlagRequired("tokenID"); err != nil {
+		return nil
+	}
 
 	return cmd
 }
 
-func savePolicySet(cmd *cobra.Command, options *saveOptions) error {
+func savePolicySet(_ *cobra.Command, options *saveOptions) error {
 	c := options.TClient
 	ctx := context.Background()
 
