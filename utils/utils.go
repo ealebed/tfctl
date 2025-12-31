@@ -25,6 +25,9 @@ import (
 
 // GetVariableID returns variable ID by given name
 func GetVariableID(variables *tfe.VariableList, variableName string) string {
+	if variables == nil {
+		return ""
+	}
 	for _, v := range variables.Items {
 		if v.Key == variableName {
 			return v.ID
@@ -36,6 +39,9 @@ func GetVariableID(variables *tfe.VariableList, variableName string) string {
 
 // GetPolicySetID returns policy set ID by given name
 func GetPolicySetID(policySets *tfe.PolicySetList, policySetName string) string {
+	if policySets == nil {
+		return ""
+	}
 	for _, p := range policySets.Items {
 		if p.Name == policySetName {
 			return p.ID
@@ -47,6 +53,9 @@ func GetPolicySetID(policySets *tfe.PolicySetList, policySetName string) string 
 
 // GetOAuthClientID returns OAuth client ID by given service provider type
 func GetOAuthClientID(oauthClient *tfe.OAuthClientList, serviceProviderName string) string {
+	if oauthClient == nil {
+		return ""
+	}
 	regexPattern := fmt.Sprintf(`(?i)%s`, serviceProviderName)
 
 	for _, o := range oauthClient.Items {
