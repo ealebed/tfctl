@@ -18,7 +18,7 @@ require (
 )
 
 require (
-	github.com/hashicorp/go-tfe v1.100.0
+	github.com/hashicorp/go-tfe v1.101.0
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
 	github.com/spf13/cobra v1.10.2
